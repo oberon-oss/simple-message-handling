@@ -94,9 +94,8 @@ public final class CountryCodeTable {
                 if (fields.length < 4) {
                     throw new CountryCodeTableException("Line " + lineCount + " does not have 4 columns");
                 } else if (fields.length > 4) {
-                    LOGGER.warn("Line {} contains additional field(s) ({}), which will be ignored.",lineCount,fields.length-4);
+                    LOGGER.warn("Line {} contains additional ({}) field(s), which will be ignored.", lineCount, fields.length - 4);
                 }
-
                 try {
                     addCountryCodeTableEntry(work, new CountryCodeTableEntryImpl(fields[0], fields[1], fields[2], fields[3]));
                 } catch (Exception e) {
@@ -104,11 +103,7 @@ public final class CountryCodeTable {
                 }
             }
         }
-        if (work.isEmpty()) {
-            throw new CountryCodeTableException("No country code table entries found");
-        } else {
-            lookupMap = Map.copyOf(work);
-        }
+        lookupMap = Map.copyOf(work);
     }
 
     private void addCountryCodeTableEntry(Map<CountryCodeTableLookupKeys, Map<String, CountryCodeTableEntry>> work, CountryCodeTableEntry countryCodeTableEntry) {
