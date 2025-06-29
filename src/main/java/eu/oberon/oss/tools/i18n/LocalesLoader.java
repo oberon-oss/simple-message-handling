@@ -36,9 +36,13 @@ class LocalesLoader {
         Pattern pattern = Pattern.compile(baseName + "_(.*?)" + "\\.properties");
         Set<Locale> locales = new HashSet<>();
 
+
         final File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
+                if ((baseName + ".properties").contentEquals(file.getName())) {
+                    processData(locales, new String[0], baseName);
+                }
                 final Matcher matcher = pattern.matcher(file.getName());
                 if (matcher.matches()) {
                     processData(locales, matcher.group(1).split("_"), baseName);
@@ -97,7 +101,7 @@ class LocalesLoader {
         CountryCodeTableEntry entry2 = COUNTRY_CODE_TABLE.findEntry(string2, ISO3166_ALPHA_2);
         if (entry1 != null && entry2 != null) {
             throw new IllegalArgumentException(
-                String.format("parameter 1 %s and parameter 2 %s are both ISO3166 Alpha 2 country codes ", string1, string2));
+                    String.format("parameter 1 %s and parameter 2 %s are both ISO3166 Alpha 2 country codes ", string1, string2));
         }
 
         if (entry1 != null) {
