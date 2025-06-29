@@ -1,13 +1,35 @@
 package eu.oberon.oss.tools.i18n;
 
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
+/**
+ * Default implementation for the {@link CountryCodeTableEntry} interface.
+ *
+ * @param countryName       Name of the country record to create. Should not be blank
+ * @param iso3166Alpha2Code The ISO 3166 Alpha 2 character code for the country. Must match pattern [A-Z]{2}
+ * @param iso3166Alpha3Code The ISO 3166 Alpha 3 character code for the country. Must match pattern [A-Z]{3}
+ * @param unm49Code         The UNM49  number for the country. Must match pattern \d{3}
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
+ */
 @Log4j2
-public record CountryCodeTableEntryImpl(String countryName, String iso3166Alpha2Code, String iso3166Alpha3Code,
-                                        String unm49Code) implements CountryCodeTableEntry {
+public record CountryCodeTableEntryImpl(
+        @NotNull String countryName,
+        @NotNull String iso3166Alpha2Code,
+        @NotNull String iso3166Alpha3Code,
+        @NotNull String unm49Code)
+        implements CountryCodeTableEntry {
 
+    /**
+     * Constructor.
+     *
+     * @throws IllegalStateException if any of the parameters are invalid
+     * @since 1.0.0
+     */
     public CountryCodeTableEntryImpl {
         boolean errorFound = false;
 

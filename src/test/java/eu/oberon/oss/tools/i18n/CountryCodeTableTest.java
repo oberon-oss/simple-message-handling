@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static eu.oberon.oss.tools.i18n.CountryCodeTableLookupKeys.*;
@@ -105,6 +106,15 @@ class CountryCodeTableTest {
         } else {
             CountryCodeTable table = assertDoesNotThrow(() -> CountryCodeTable.getInstance(fromFile));
             assertEquals(expectedEntries, table.getEntryCount());
+        }
+    }
+
+    @Test
+    void getAvailableLookupValuesTest() {
+        for (CountryCodeTableLookupKeys key : CountryCodeTableLookupKeys.values()) {
+            Set<String> values = cct.getAvailableLookupValues(key);
+            assertEquals(cct.getEntryCount(), values.size());
+            assertThrows(UnsupportedOperationException.class, values::clear);
         }
     }
 }

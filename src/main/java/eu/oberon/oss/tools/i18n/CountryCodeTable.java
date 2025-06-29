@@ -2,11 +2,13 @@ package eu.oberon.oss.tools.i18n;
 
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static eu.oberon.oss.tools.i18n.CountryCodeTableLookupKeys.NAME;
 
@@ -21,14 +23,42 @@ public final class CountryCodeTable {
     private final Map<CountryCodeTableLookupKeys, Map<String, CountryCodeTableEntry>> lookupMap;
 
     /**
-     * Performs a lookup operation
+     * Performs a lookup operation for the specified country code and lookup key
+     *
+     * @param lookupValue The value to lookup.
+     * @param lookupKey   The lookup key, describing the attribute to look for
+     *
+     * @return an instance of the {@link CountryCodeTableEntry} for the specified parameters, or {@literal <null>} if
+     *         the specified lookupValue is not present for the provided lookupKey.
+     *
+     * @since 1.0.0
      */
-    public CountryCodeTableEntry findEntry(@NotNull String countryCode, @NotNull CountryCodeTableLookupKeys lookupKey) {
-        return lookupMap.get(lookupKey).get(countryCode);
+    public @Nullable CountryCodeTableEntry findEntry(@NotNull String lookupValue, @NotNull CountryCodeTableLookupKeys lookupKey) {
+        return lookupMap.get(lookupKey).get(lookupValue);
     }
 
+    /**
+     * Returns the number of country table entries present.
+     *
+     * @return The number of records in the country table.
+     *
+     * @since 1.0.0
+     */
     public int getEntryCount() {
         return lookupMap.get(NAME).size();
+    }
+
+    /**
+     * Returns the lookup values for the specified lookup key
+     *
+     * @param lookupKey type of lookup key to retrieve to lookup values for.
+     *
+     * @return An immutable copy of the lookup values as a set.
+     *
+     * @since 1.0.0
+     */
+    public Set<String> getAvailableLookupValues(@NotNull CountryCodeTableLookupKeys lookupKey) {
+        return Set.copyOf(lookupMap.get(lookupKey).keySet());
     }
 
     private static CountryCodeTable defaultCountryCodeTable;
