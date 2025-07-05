@@ -21,7 +21,7 @@ class MessageBundleResolverImplTest {
     @BeforeEach
     void setUp() throws IOException {
         resolver = new MessageBundleResolverImpl("Default",
-                                                 new File("src/test/resources/set1/"));
+                                                 new File("src/test/resources/set-1/"));
     }
 
     public static Stream<Arguments> testLocales() {

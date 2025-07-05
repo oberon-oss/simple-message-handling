@@ -71,10 +71,10 @@ class CountryCodeTableTest {
 
     public static Stream<Arguments> loadFromFileWithInvalidContentTest() {
         return Stream.of(
-                Arguments.of(new File("src/test/resources/incorrect-name.csv")),
-                Arguments.of(new File("src/test/resources/incorrect-alpha3-code.csv")),
-                Arguments.of(new File("src/test/resources/incorrect-alpha2-code.csv")),
-                Arguments.of(new File("src/test/resources/incorrect-unm49-code.csv"))
+                Arguments.of(new File("src/test/resources/csv-files/incorrect-name.csv")),
+                Arguments.of(new File("src/test/resources/csv-files/incorrect-alpha3-code.csv")),
+                Arguments.of(new File("src/test/resources/csv-files/incorrect-alpha2-code.csv")),
+                Arguments.of(new File("src/test/resources/csv-files/incorrect-unm49-code.csv"))
         );
     }
 
@@ -90,8 +90,8 @@ class CountryCodeTableTest {
 
     public static Stream<Arguments> loadFromFileContainingMoreOrLessFields() {
         return Stream.of(
-                Arguments.of(0, new File("src/test/resources/line-containing-3-fields.csv")),
-                Arguments.of(1, new File("src/test/resources/line-containing-5-fields.csv"))
+                Arguments.of(0, new File("src/test/resources/csv-files/line-containing-3-fields.csv")),
+                Arguments.of(1, new File("src/test/resources/csv-files/line-containing-5-fields.csv"))
         );
     }
 
