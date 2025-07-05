@@ -56,7 +56,7 @@ class LocalesLoader {
         Builder builder = new Builder();
         switch (strings.length) {
             case 0:
-                LOGGER.info("Default property file is present for {}", baseName);
+                LOGGER.info("Default property file is present for basename '{}'", baseName);
                 break;
             case 1:
                 // language
