@@ -2,7 +2,6 @@ package eu.oberon.oss.tools.i18n;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
