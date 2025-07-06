@@ -13,6 +13,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * Default implementation of the {@link MessageBundleResolver} interface.
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
+ */
 @Log4j2
 public class MessageBundleResolverImpl implements MessageBundleResolver {
 
@@ -25,19 +31,33 @@ public class MessageBundleResolverImpl implements MessageBundleResolver {
     private final File directory;
 
     @Getter
-    private Locale currentLocale;
+    private Locale currentActiveLocale;
 
     private final URLClassLoader loader;
 
     private final Set<Locale> locales;
 
+    /**
+     * Loads the resource bundle date with the specified base name from the provided directory.
+     *
+     * @param baseName  The basename of the resource bundle.
+     * @param directory The directory to load from.
+     *
+     * @throws IOException              for errors accessing or loading the data.
+     * @throws IllegalArgumentException if the specified directory does not exist, is not a directory or cannot be read
+     *                                  from.
+     */
     public MessageBundleResolverImpl(@NotNull String baseName, @NotNull File directory) throws IOException {
+        if (!directory.exists()) {
+            throw new IllegalArgumentException("'" + directory + "' does not exist");
+        }
+
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not a directory");
+            throw new IllegalArgumentException("'" + directory + "' is not a directory");
         }
 
         if (!directory.canRead()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable");
+            throw new IllegalArgumentException("'" + directory + "' is not readable");
         }
 
         loader = new URLClassLoader(new URL[]{directory.toURI().toURL()});
@@ -45,7 +65,7 @@ public class MessageBundleResolverImpl implements MessageBundleResolver {
         this.baseName = baseName;
         this.directory = directory;
         this.locales = Set.copyOf(LocalesLoader.loadLocales(this.baseName, this.directory));
-        loadMessageResourceBundle();
+        loadMessageResourceBundleForDefaultLocale();
     }
 
     @Override
@@ -53,18 +73,19 @@ public class MessageBundleResolverImpl implements MessageBundleResolver {
         return locales.contains(locale);
     }
 
+    @Override
     public void loadDefaultProperties() {
         loadMessageResourceBundle(Locale.ROOT);
     }
 
     @Override
-    public boolean isLocaleAvailable(String languageTag) {
-        return isLocaleAvailable(Locale.forLanguageTag(languageTag));
+    public Locale loadMessageResourceBundleForDefaultLocale() {
+        return loadMessageResourceBundle(Locale.getDefault());
     }
 
     @Override
-    public Locale loadMessageResourceBundle() {
-        return loadMessageResourceBundle(Locale.getDefault());
+    public boolean isLocaleAvailable(String languageTag) {
+        return isLocaleAvailable(Locale.forLanguageTag(languageTag));
     }
 
     @Override
@@ -82,12 +103,12 @@ public class MessageBundleResolverImpl implements MessageBundleResolver {
             resourceBundle = ResourceBundle.getBundle(baseName, Locale.ROOT, loader);
             LOGGER.warn("Locale '{}' is not available, reverted to default bundle content", locale);
         }
-        currentLocale = resourceBundle.getLocale();
-        return currentLocale;
+        currentActiveLocale = resourceBundle.getLocale();
+        return currentActiveLocale;
     }
 
     @Override
-    public String getString(String key) {
+    public String getString(@NotNull String key) {
         return resourceBundle.getString(key);
     }
 

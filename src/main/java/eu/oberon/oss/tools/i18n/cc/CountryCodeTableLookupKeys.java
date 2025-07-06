@@ -1,8 +1,9 @@
-package eu.oberon.oss.tools.i18n;
+package eu.oberon.oss.tools.i18n.cc;
 
 /**
  * Defines the available lookup key types to query a country code table.
  *
+ * @author TigerLilly64
  * @since 1.0.0
  */
 public enum CountryCodeTableLookupKeys {

@@ -1,4 +1,4 @@
-package eu.oberon.oss.tools.i18n;
+package eu.oberon.oss.tools.i18n.cc;
 
 import org.jetbrains.annotations.NotNull;
 

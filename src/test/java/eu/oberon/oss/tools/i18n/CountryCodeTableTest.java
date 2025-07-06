@@ -1,5 +1,9 @@
 package eu.oberon.oss.tools.i18n;
 
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTable;
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTableEntry;
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTableException;
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +15,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static eu.oberon.oss.tools.i18n.CountryCodeTableLookupKeys.*;
+import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CountryCodeTableTest {

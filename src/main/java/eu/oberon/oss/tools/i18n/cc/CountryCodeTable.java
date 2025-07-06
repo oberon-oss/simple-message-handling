@@ -1,4 +1,4 @@
-package eu.oberon.oss.tools.i18n;
+package eu.oberon.oss.tools.i18n.cc;
 
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static eu.oberon.oss.tools.i18n.CountryCodeTableLookupKeys.NAME;
+import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.NAME;
 
 /**
  * Allows lookup up country information from a code table.
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
  */
 @Log4j2
 public final class CountryCodeTable {

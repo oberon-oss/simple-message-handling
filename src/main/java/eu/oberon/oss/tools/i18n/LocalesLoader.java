@@ -1,5 +1,7 @@
 package eu.oberon.oss.tools.i18n;
 
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTable;
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTableEntry;
 import lombok.extern.log4j.Log4j2;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +15,15 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static eu.oberon.oss.tools.i18n.CountryCodeTableLookupKeys.ISO3166_ALPHA_2;
+import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.ISO3166_ALPHA_2;
 
+
+/**
+ * Enables loading of resource bundle properties from a directory
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
+ */
 @Log4j2
 class LocalesLoader {
 
@@ -32,6 +41,16 @@ class LocalesLoader {
 
     }
 
+    /**
+     * Reads the specified directory and creates a set of locales based on the filenames in the directory.
+     *
+     * @param baseName  The basename of the resource bundle property file(s) in the specified directory
+     * @param directory The directory to read the files from.
+     *
+     * @return A set of Locale(s) for which a representation was found the directory
+     *
+     * @since 1.0.0
+     */
     static Set<Locale> loadLocales(String baseName, File directory) {
         Pattern pattern = Pattern.compile(baseName + "_(.*?)" + "\\.properties");
         Set<Locale> locales = new HashSet<>();
@@ -39,6 +58,9 @@ class LocalesLoader {
 
         final File[] files = directory.listFiles();
         if (files != null) {
+            if (files.length == 0) {
+                throw new IllegalStateException("No files in directory " + directory);
+            }
             for (File file : files) {
                 if ((baseName + ".properties").contentEquals(file.getName())) {
                     processData(locales, new String[0], baseName);
@@ -96,7 +118,6 @@ class LocalesLoader {
     }
 
     private static void setRegionOrScript(Builder builder, @NotNull String string1, @NotNull String string2) {
-
         CountryCodeTableEntry entry1 = COUNTRY_CODE_TABLE.findEntry(string1, ISO3166_ALPHA_2);
         CountryCodeTableEntry entry2 = COUNTRY_CODE_TABLE.findEntry(string2, ISO3166_ALPHA_2);
         if (entry1 != null && entry2 != null) {

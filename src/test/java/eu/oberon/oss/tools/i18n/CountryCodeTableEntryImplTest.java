@@ -1,5 +1,6 @@
 package eu.oberon.oss.tools.i18n;
 
+import eu.oberon.oss.tools.i18n.cc.CountryCodeTableEntryImpl;
 import nl.altindag.log.LogCaptor;
 
 import static org.assertj.core.api.Assertions.assertThat;
