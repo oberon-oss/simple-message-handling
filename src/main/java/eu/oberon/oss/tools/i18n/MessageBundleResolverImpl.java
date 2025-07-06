@@ -1,5 +1,6 @@
 package eu.oberon.oss.tools.i18n;
 
+import eu.oberon.oss.tools.i18n.loader.LocalesLoader;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 

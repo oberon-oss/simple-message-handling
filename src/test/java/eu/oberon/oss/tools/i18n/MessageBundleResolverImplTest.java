@@ -100,6 +100,7 @@ class MessageBundleResolverImplTest {
         );
         assertEquals("No files in directory " + path, exception.getMessage());
     }
+
     @Test
     void testWithNonDirectoryEntry() {
         Path path = Paths.get("src/test/resources/log4j2-test.xml");

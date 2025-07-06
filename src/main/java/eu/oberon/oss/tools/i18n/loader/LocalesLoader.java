@@ -1,4 +1,4 @@
-package eu.oberon.oss.tools.i18n;
+package eu.oberon.oss.tools.i18n.loader;
 
 import eu.oberon.oss.tools.i18n.cc.CountryCodeTable;
 import eu.oberon.oss.tools.i18n.cc.CountryCodeTableEntry;
@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Locale.Builder;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.ISO3166_ALPHA_2;
 
@@ -25,8 +24,7 @@ import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.ISO3166_ALP
  * @since 1.0.0
  */
 @Log4j2
-class LocalesLoader {
-
+public class LocalesLoader {
     private static final CountryCodeTable COUNTRY_CODE_TABLE;
 
     static {
@@ -51,12 +49,13 @@ class LocalesLoader {
      *
      * @since 1.0.0
      */
-    static Set<Locale> loadLocales(String baseName, File directory) {
-        Pattern pattern = Pattern.compile(baseName + "_(.*?)" + "\\.properties");
+    public static Set<Locale> loadLocales(String baseName, File directory) {
+
         Set<Locale> locales = new HashSet<>();
 
+        PropertyFileFilter fileFilter = new PropertyFileFilter(baseName);
 
-        final File[] files = directory.listFiles();
+        final File[] files = directory.listFiles(fileFilter);
         if (files != null) {
             if (files.length == 0) {
                 throw new IllegalStateException("No files in directory " + directory);
@@ -65,10 +64,10 @@ class LocalesLoader {
                 if ((baseName + ".properties").contentEquals(file.getName())) {
                     processData(locales, new String[0], baseName);
                 }
-                final Matcher matcher = pattern.matcher(file.getName());
-                if (matcher.matches()) {
-                    processData(locales, matcher.group(1).split("_"), baseName);
-                }
+                Matcher matcher = fileFilter.getPattern().matcher(file.getName());
+                //noinspection ResultOfMethodCallIgnored - we need to invoke the matcher to be able to use it.
+                matcher.matches();
+                processData(locales, matcher.group(1).split("_"), baseName);
             }
         }
         return locales;
