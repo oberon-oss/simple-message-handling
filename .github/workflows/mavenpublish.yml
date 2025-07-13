@@ -17,4 +17,4 @@ jobs:
       - name: Publish package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -Dmaven.test.skip -DskipTests --batch deploy
+        run: mvn -Dmaven.test.skip -DskipTests -B deploy
