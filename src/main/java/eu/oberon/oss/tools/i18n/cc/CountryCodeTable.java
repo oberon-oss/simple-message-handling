@@ -74,6 +74,7 @@ public final class CountryCodeTable {
      *
      * @return The default Country code table provided by this class.
      *
+     * @throws IOException when the classloader failed to load the default country code table.
      * @since 1.0.0
      */
     public static CountryCodeTable getDefaultInstance() throws IOException {
