@@ -28,14 +28,37 @@ public class MessagesHelperImpl implements MessagesHelper {
     private @Nullable Constructor<? extends Exception> throwableException = null;
     private @Nullable Constructor<? extends Exception> fullConstructor = null;
 
+    /**
+     * Creates a message formater for basic messages.
+     *
+     * @param formatString The formatting string to use.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString) {
         this(formatString, null, null);
     }
 
+    /**
+     * Creates a message formater for messages that are intended for logging.
+     *
+     * @param formatString The formatting string to use.
+     * @param logLevel     the default loglevel to use when logging the message.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString, Level logLevel) {
         this(formatString, null, logLevel);
     }
 
+    /**
+     * Creates a message formater intended for exception creation.
+     *
+     * @param formatString   The formatting string to use.
+     * @param exceptionClass the exception class to use when creating an actual exception instance.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString, Class<? extends Exception> exceptionClass) {
         this(formatString, exceptionClass, null);
     }
