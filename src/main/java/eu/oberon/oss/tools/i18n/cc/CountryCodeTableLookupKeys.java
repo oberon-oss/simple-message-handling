@@ -7,5 +7,28 @@ package eu.oberon.oss.tools.i18n.cc;
  * @since 1.0.0
  */
 public enum CountryCodeTableLookupKeys {
-    NAME, ISO3166_ALPHA_2, ISO3166_ALPHA_3, UNM49
+    /**
+     * Represent the name of the country to lookup.
+     *
+     * @since 1.0.0
+     */
+    NAME,
+    /**
+     * Represent the 2-letter code of the country to lookup.
+     *
+     * @since 1.0.0
+     */
+    ISO3166_ALPHA_2,
+    /**
+     * Represent the 3-letter code of the country to lookup.
+     *
+     * @since 1.0.0
+     */
+    ISO3166_ALPHA_3,
+    /**
+     * Represents the ' Standard Country or Area Codes for Statistical Use' code of the country to lookup.
+     *
+     * @since 1.0.0
+     */
+    UNM49
 }

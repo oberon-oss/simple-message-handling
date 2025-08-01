@@ -15,13 +15,13 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MessageBundleResolverImplTest {
+class ExternalMessageBundleResolverTest {
 
     private MessageBundleResolver resolver;
 
     @BeforeEach
     void setUp() throws IOException {
-        resolver = new MessageBundleResolverImpl("Default",
+        resolver = new ExternalMessageBundleResolver("Default",
                 new File("src/test/resources/set-1/"));
     }
 
@@ -86,7 +86,7 @@ class MessageBundleResolverImplTest {
         Path path = Paths.get("src/test/resources/does-not-exist");
         File file = new File("src/test/resources/does-not-exist");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new MessageBundleResolverImpl("Default", file)
+                () -> new ExternalMessageBundleResolver("Default", file)
         );
         assertEquals("'" + path + "' does not exist", exception.getMessage());
     }
@@ -96,7 +96,7 @@ class MessageBundleResolverImplTest {
         Path path = Paths.get("src/test/resources/set-2");
         File file = new File("src/test/resources/set-2");
         IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> new MessageBundleResolverImpl("Default", file)
+                () -> new ExternalMessageBundleResolver("Default", file)
         );
         assertEquals("No files in directory " + path, exception.getMessage());
     }
@@ -106,7 +106,7 @@ class MessageBundleResolverImplTest {
         Path path = Paths.get("src/test/resources/log4j2-test.xml");
         File file = new File("src/test/resources/log4j2-test.xml");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new MessageBundleResolverImpl("Default", file)
+                () -> new ExternalMessageBundleResolver("Default", file)
         );
         assertEquals("'" + path + "' is not a directory", exception.getMessage());
     }

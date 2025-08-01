@@ -15,13 +15,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
- * Default implementation of the {@link MessageBundleResolver} interface.
+ * Implementation of the {@link MessageBundleResolver} interface that allows loading resource bundles from
  *
  * @author TigerLilly64
  * @since 1.0.0
  */
 @Log4j2
-public class MessageBundleResolverImpl implements MessageBundleResolver {
+public class ExternalMessageBundleResolver implements MessageBundleResolver {
 
     private ResourceBundle resourceBundle;
 
@@ -48,7 +48,7 @@ public class MessageBundleResolverImpl implements MessageBundleResolver {
      * @throws IllegalArgumentException if the specified directory does not exist, is not a directory or cannot be read
      *                                  from.
      */
-    public MessageBundleResolverImpl(@NotNull String baseName, @NotNull File directory) throws IOException {
+    public ExternalMessageBundleResolver(@NotNull String baseName, @NotNull File directory) throws IOException {
         if (!directory.exists()) {
             throw new IllegalArgumentException("'" + directory + "' does not exist");
         }
