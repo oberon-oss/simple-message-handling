@@ -59,11 +59,11 @@ class MessageProcessorTest {
 
     static Stream<Arguments> testMessageProcessorLogging() {
         return Stream.of(
-                Arguments.of(LT_DT, T2, EM_DT, Level.TRACE),
-                Arguments.of(LT_EN, T2, EM_EN, Level.TRACE),
-                Arguments.of(LT_NL, T2, EM_NL, Level.TRACE),
-                Arguments.of(LT_DE, T2, EM_DE, Level.TRACE),
-                Arguments.of(LT_FR, T2, EM_FR, Level.TRACE)
+                Arguments.of(LT_DT, T2, EM_DT, Level.INFO),
+                Arguments.of(LT_EN, T2, EM_EN, Level.INFO),
+                Arguments.of(LT_NL, T2, EM_NL, Level.INFO),
+                Arguments.of(LT_DE, T2, EM_DE, Level.INFO),
+                Arguments.of(LT_FR, T2, EM_FR, Level.INFO)
         );
     }
 
@@ -133,6 +133,7 @@ class MessageProcessorTest {
         MessageProcessor<Test> tmpMessageProcessor = new MessageProcessor<>(tempResolver, Locale.forLanguageTag(languageTag));
         tmpMessageProcessor.logMessage(enumValue, LOGGER, "test.key", "test.value");
         assertTrue(logCaptor.getLogs().contains(expectedMessage));
+        assertEquals(logLevel,enumValue.getLevel());
     }
 
 
@@ -149,5 +150,6 @@ class MessageProcessorTest {
         Exception exception = messageProcessor.createExceptionWithMessage(enumValue, "test.key", "test.value");
         assertEquals(exception.getMessage(), expectedMessage);
         assertEquals(exception.getClass(), expectedExceptionClass);
+        assertEquals(logLevel,enumValue.getLevel());
     }
 }
