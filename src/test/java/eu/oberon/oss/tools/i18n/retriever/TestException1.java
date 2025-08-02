@@ -1,5 +1,6 @@
 package eu.oberon.oss.tools.i18n.retriever;
 
+@SuppressWarnings("unused")
 public class TestException1 extends Exception {
     public TestException1(String message) {
         super(message);
