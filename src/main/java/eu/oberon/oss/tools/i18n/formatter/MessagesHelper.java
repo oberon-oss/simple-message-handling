@@ -1,18 +1,17 @@
 package eu.oberon.oss.tools.i18n.formatter;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * An interface for handling messages through logging and exception creation. This interface
  * is designed to provide a unified mechanism for logging parameterized messages and creating
  * exceptions with formatted messages.
  *
+ * @param <L> Represents the Logger class to use when logging messages.
+ * @param <V> The class type of the Log levels to use.
+ *
  * @author TigerLilly64
  * @since 1.0.0
  */
-public interface MessagesHelper extends MessageFormatter {
+public interface MessagesHelper<L, V> extends MessageFormatter {
     /**
      * Returns the message definition used by a helper instance.
      *
@@ -23,32 +22,29 @@ public interface MessagesHelper extends MessageFormatter {
     MessageDefinition getMessageDefinition();
 
     /**
-     * Returns the canonical name of the exception class used by this helper when calling
-     * {@link #createExceptionWithMessage(Object...)} (Object...)},
-     * if the messsage instance supports the creation of an exception.
-     *
-     * @return The name of the exception class, or {@literal <null>} if the message cannot be used to create exceptions.
-     *
-     * @since 1.0.0
-     */
-    @Nullable String getExceptionClassName();
-
-    /**
-     * Returns the log level being used, when the {@link #logMessage(Logger, Object...)} method is called.
-     *
-     * @return The log level to be used when logging messages, or {@literal <null>}
-     */
-    @Nullable Level getLogLevel();
-
-    /**
      * Logs a message using the provided logger with optional parameters for formatting.
      * The message format, logging level, and behavior depend on the implementation and
      * the message definition associated with the instance.
      *
      * @param logger the logger used to log the message
      * @param params optional parameters to be included in the formatted message
+     *
+     * @since 1.0.0
      */
-    void logMessage(Logger logger, Object... params);
+    void logMessage(L logger, Object... params);
+
+    /**
+     * Logs a message using the provided logger with optional parameters for formatting, overriding the loglevel defined
+     * The message format, logging level, and behavior depend on the implementation and
+     * the message definition associated with the instance.
+     *
+     * @param logger        the logger used to log the message
+     * @param overrideLevel the log level message to override the default log level
+     * @param params        optional parameters to be included in the formatted message
+     *
+     * @since 1.0.0
+     */
+    void logMessageWithLevelOverride(L logger, V overrideLevel, Object... params);
 
     /**
      * Creates an exception using the specified parameters to format the message.
@@ -90,5 +86,6 @@ public interface MessagesHelper extends MessageFormatter {
      *                               creation
      * @throws MessagesException     will be thrown when the exception creation runs into an error.*
      */
-    Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace, Object... params);
+    Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                                            Object... params);
 }

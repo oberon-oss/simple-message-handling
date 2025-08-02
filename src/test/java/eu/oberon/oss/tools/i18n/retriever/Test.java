@@ -1,9 +1,10 @@
 package eu.oberon.oss.tools.i18n.retriever;
 
+
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
-public enum Test implements MessageKeyRetriever<Test, String> {
+public enum Test implements MessageDetailProvider<Level, Test, String> {
     T1("some.key"),
     T2("some.key", Level.INFO),
     T3("some.key", TestException1.class),
@@ -39,12 +40,12 @@ public enum Test implements MessageKeyRetriever<Test, String> {
     }
 
     @Override
-    public @Nullable Level getLevel() {
+    public @Nullable Level getLogLevel() {
         return level;
     }
 
     @Override
-    public @Nullable Class<? extends Exception> getException() {
+    public @Nullable Class<? extends Exception> getExceptionClass() {
         return exceptionClass;
     }
 

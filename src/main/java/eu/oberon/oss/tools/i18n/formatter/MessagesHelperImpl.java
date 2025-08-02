@@ -16,12 +16,11 @@ import java.lang.reflect.Constructor;
  * @since 1.0.0
  */
 @Log4j2
-public class MessagesHelperImpl implements MessagesHelper {
+public class MessagesHelperImpl implements MessagesHelper<Logger, Level> {
     @Getter
     private final MessageDefinition messageDefinition;
-    @Getter
+
     private final @Nullable String exceptionClassName;
-    @Getter
     private final @Nullable Level logLevel;
 
     private @Nullable Constructor<? extends Exception> standardConstructor = null;
@@ -114,12 +113,17 @@ public class MessagesHelperImpl implements MessagesHelper {
     }
 
     @Override
-    @SuppressWarnings("java:S2629")
     public void logMessage(@NotNull Logger logger, @Nullable Object... params) {
+        logMessageWithLevelOverride(logger, logLevel, params);
+    }
+
+    @Override
+    @SuppressWarnings("java:S2629")
+    public void logMessageWithLevelOverride(Logger logger, Level overrideLevel, Object... params) {
         if (logLevel == null) {
             throw new MessagesException("Message is NOT a loggable message.");
         }
-        logger.log(logLevel, messageDefinition.createFormattedMessage(params));
+        logger.log(overrideLevel, messageDefinition.createFormattedMessage(params));
     }
 
     @Override

@@ -37,6 +37,7 @@ class MessageProcessorTest {
     private final LogCaptor logCaptor = LogCaptor.forClass(MessageProcessorTest.class);
 
     static Stream<Arguments> testMessageProcessorSimpleMessage() {
+
         return Stream.of(
                 Arguments.of(LT_DT, T1, EM_DT),
                 Arguments.of(LT_EN, T1, EM_EN),
@@ -121,7 +122,7 @@ class MessageProcessorTest {
         assertEquals(expectedMessage, exception.getMessage());
 
         // Test exception class matches
-        assertEquals(enumValue.getException(), expectedExceptionClass);
+        assertEquals(enumValue.getExceptionClass(), expectedExceptionClass);
     }
 
     @ParameterizedTest
@@ -133,7 +134,10 @@ class MessageProcessorTest {
         MessageProcessor<Test> tmpMessageProcessor = new MessageProcessor<>(tempResolver, Locale.forLanguageTag(languageTag));
         tmpMessageProcessor.logMessage(enumValue, LOGGER, "test.key", "test.value");
         assertTrue(logCaptor.getLogs().contains(expectedMessage));
-        assertEquals(logLevel,enumValue.getLevel());
+        assertEquals(logLevel, enumValue.getLogLevel());
+
+        tmpMessageProcessor.logMessageWithLevelOverride(enumValue, LOGGER, Level.ERROR, "test.key", "test.value");
+        assertTrue(logCaptor.getErrorLogs().contains(expectedMessage));
     }
 
 
@@ -150,6 +154,6 @@ class MessageProcessorTest {
         Exception exception = messageProcessor.createExceptionWithMessage(enumValue, "test.key", "test.value");
         assertEquals(exception.getMessage(), expectedMessage);
         assertEquals(exception.getClass(), expectedExceptionClass);
-        assertEquals(logLevel,enumValue.getLevel());
+        assertEquals(logLevel, enumValue.getLogLevel());
     }
 }
