@@ -36,7 +36,7 @@ public class MessagesHelperImpl implements MessagesHelper {
      * @since 1.0.0
      */
     public MessagesHelperImpl(String formatString) {
-        this(formatString, null, null);
+        this(formatString, null, (Level) null);
     }
 
     /**
@@ -63,6 +63,19 @@ public class MessagesHelperImpl implements MessagesHelper {
         this(formatString, exceptionClass, null);
     }
 
+    /**
+     * Creates a message formatter that supports both logging messages AND exception creation.
+     *
+     * @param formatString   The formatting string to use.
+     * @param logLevel       the default loglevel to use when logging the message.
+     * @param exceptionClass The exception class to use when creating an actual exception instance.
+     *
+     * @since 1.0.0
+     */
+    public MessagesHelperImpl(String formatString, Level logLevel, Class<? extends Exception> exceptionClass) {
+        this(formatString, exceptionClass, logLevel);
+    }
+
     private MessagesHelperImpl(String formatString, @Nullable Class<? extends Exception> exceptionClass, @Nullable Level logLevel) {
         if (exceptionClass != null && Exception.class.isAssignableFrom(exceptionClass)) {
             standardConstructor = createConstructor(exceptionClass, String.class);
@@ -79,7 +92,8 @@ public class MessagesHelperImpl implements MessagesHelper {
         messageDefinition = new MessageDefinition(formatString);
     }
 
-    private static Constructor<? extends Exception> createConstructor(Class<? extends Exception> exceptionClass, Class<?>... parameterTypes) {
+    private static Constructor<? extends Exception> createConstructor(Class<? extends Exception> exceptionClass,
+                                                                      Class<?>... parameterTypes) {
         try {
             return exceptionClass.getConstructor(parameterTypes);
         } catch (NoSuchMethodException e) {
@@ -133,7 +147,8 @@ public class MessagesHelperImpl implements MessagesHelper {
     }
 
     @Override
-    public Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace, Object... params) {
+    public Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                                                   Object... params) {
         if (fullConstructor == null) {
             throw new MessagesException(exceptionClassName + ".getConstructor(String,Throwable,boolean,boolean) does not exist.");
         }
