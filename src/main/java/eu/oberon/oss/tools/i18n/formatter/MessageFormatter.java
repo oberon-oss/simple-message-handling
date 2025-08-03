@@ -3,7 +3,10 @@ package eu.oberon.oss.tools.i18n.formatter;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Contract
+ * Contract for basic message formatting.
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
  */
 public interface MessageFormatter {
     /**

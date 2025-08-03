@@ -6,7 +6,7 @@
 
     <groupId>eu.oberon.oss</groupId>
     <artifactId>simple-message-handling</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -226,6 +226,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>eu.oberon.oss.tools</groupId>
+                <artifactId>code-tables</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
                 <groupId>info.picocli</groupId>
                 <artifactId>picocli</artifactId>
                 <version>${picocli.verions}</version>
@@ -292,6 +297,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>eu.oberon.oss.tools</groupId>
+            <artifactId>code-tables</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

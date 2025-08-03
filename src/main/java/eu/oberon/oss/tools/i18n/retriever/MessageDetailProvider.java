@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <E> The enumeration that implements this interface
  * @param <O> The type object representing the message key.
  *
+ * @author TigerLilly64
  * @since 1.0.0
  */
 @SuppressWarnings("unused")

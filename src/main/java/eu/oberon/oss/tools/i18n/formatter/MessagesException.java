@@ -8,7 +8,9 @@ package eu.oberon.oss.tools.i18n.formatter;
  */
 public class MessagesException extends RuntimeException {
     /**
-     * {@inheritDoc}
+     * Creates a basic message exception.
+     *
+     * @param message The message for the exception.
      *
      * @since 1.0.0
      */

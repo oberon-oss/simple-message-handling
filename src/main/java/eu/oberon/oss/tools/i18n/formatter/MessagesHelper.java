@@ -62,6 +62,8 @@ public interface MessagesHelper<L, V> extends MessageFormatter {
     Exception createExceptionWithMessage(Object... params);
 
     /**
+     * Creates exception with message and cause.
+     *
      * @param cause  The exception that was the reason for the raising for this exception
      * @param params the parameters used to format the exception message
      *
@@ -75,6 +77,8 @@ public interface MessagesHelper<L, V> extends MessageFormatter {
     Exception createExceptionWithCause(Throwable cause, Object... params);
 
     /**
+     * Creates an exception with the common parameters for an {@link Exception}
+     *
      * @param cause              The exception that was the reason for the raising for this exception
      * @param enableSuppression  whether suppression is enabled or disabled
      * @param writableStackTrace whether the stack trace should be writable

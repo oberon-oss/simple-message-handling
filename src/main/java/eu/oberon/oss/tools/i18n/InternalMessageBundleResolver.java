@@ -3,18 +3,42 @@ package eu.oberon.oss.tools.i18n;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Handles loading of resource bundles inside of project jar/war/ear file.
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
+ */
 public class InternalMessageBundleResolver implements MessageBundleResolver {
 
     private final String baseName;
     private ResourceBundle resourceBundle;
 
-    public InternalMessageBundleResolver(@NotNull String baseName, @NotNull Locale locale)  {
+    /**
+     * Creates a new resolver for the provided basename and locale.
+     *
+     * @param baseName The basename of the resource bundle to load
+     * @param locale   The locale to select for the resource bundle
+     *
+     * @throws MissingResourceException if the specified locale can not be loaded.
+     * @since 1.0.0
+     */
+    public InternalMessageBundleResolver(@NotNull String baseName, @NotNull Locale locale) {
         this.baseName = baseName;
         loadMessageResourceBundle(locale);
     }
 
+    /**
+     * Loads the specified basename locale's default properties
+     *
+     * @param baseName The basename of the resource bundle to load
+     *
+     * @throws MissingResourceException if the specified locale can not be loaded.
+     * @since 1.0.0
+     */
     public InternalMessageBundleResolver(@NotNull String baseName) {
         this.baseName = baseName;
         loadDefaultProperties();
