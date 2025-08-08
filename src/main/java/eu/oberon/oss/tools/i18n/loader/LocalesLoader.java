@@ -1,7 +1,7 @@
 package eu.oberon.oss.tools.i18n.loader;
 
-import eu.oberon.oss.tools.i18n.cc.CountryCodeTable;
-import eu.oberon.oss.tools.i18n.cc.CountryCodeTableEntry;
+import eu.oberon.oss.tools.cc.CountryCodeTable;
+import eu.oberon.oss.tools.cc.CountryCodeTableEntry;
 import lombok.extern.log4j.Log4j2;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import java.util.Locale.Builder;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-import static eu.oberon.oss.tools.i18n.cc.CountryCodeTableLookupKeys.ISO3166_ALPHA_2;
+import static eu.oberon.oss.tools.cc.CountryCodeTableLookupKeys.ISO3166_ALPHA_2;
 
 
 /**

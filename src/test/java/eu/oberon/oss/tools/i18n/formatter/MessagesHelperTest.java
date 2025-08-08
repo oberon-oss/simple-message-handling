@@ -16,13 +16,14 @@ import java.io.IOException;
 import static eu.oberon.oss.tools.i18n.formatter.FormatStringType.STRING_FORMAT;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"resource", "ThrowableNotThrown"})
 @Log4j2
 class MessagesHelperTest {
     private static final String TEMPLATE = "Example non-log/non-exception message %s";
 
     @Test
     void testBasicFormatter() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE);
         assertNotNull(helper);
 
         assertEquals(STRING_FORMAT, helper.getMessageDefinition().getFormatStringType());
@@ -35,7 +36,7 @@ class MessagesHelperTest {
         Logger testLogger = LogManager.getLogger(MessagesHelperImpl.class);
         LogCaptor logCaptor = LogCaptor.forClass(MessagesHelperImpl.class);
 
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, Level.INFO);
+        MessagesHelper<Logger, Level> helper = new MessagesHelperImpl(TEMPLATE, Level.INFO);
         helper.logMessage(testLogger, "test");
         assertTrue(logCaptor.getLogs().contains("Example non-log/non-exception message test"));
     }
@@ -43,7 +44,7 @@ class MessagesHelperTest {
     @Test
     void testNonLoggerMessageFormatter() {
         Logger testLogger = LogManager.getLogger(MessagesHelperImpl.class);
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE);
+        MessagesHelper<Logger, Level> helper = new MessagesHelperImpl(TEMPLATE);
         assertThrows(MessagesException.class, () -> helper.logMessage(testLogger, "test"));
     }
 
@@ -52,14 +53,14 @@ class MessagesHelperTest {
         Logger testLogger = LogManager.getLogger(MessagesHelperImpl.class);
         LogCaptor logCaptor = LogCaptor.forClass(MessagesHelperImpl.class);
 
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, Level.TRACE);
+        MessagesHelper<Logger, Level> helper = new MessagesHelperImpl(TEMPLATE, Level.TRACE);
         helper.logMessage(testLogger, "test");
         assertFalse(logCaptor.getLogs().contains("Example non-log/non-exception message test"));
     }
 
     @Test
     void testMessageOnlyExceptionFormatter() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
+        MessagesHelper<Logger, Level> helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
         assertNotNull(helper);
         Exception exception = helper.createExceptionWithMessage("test");
         assertEquals("Example non-log/non-exception message test", exception.getMessage());
@@ -67,7 +68,7 @@ class MessagesHelperTest {
 
     @Test
     void testMessageForCauseExceptionFormatter() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageForCauseException.class);
+        MessagesHelper<Logger, Level> helper = new MessagesHelperImpl(TEMPLATE, MessageForCauseException.class);
         assertNotNull(helper);
         Exception cause = new IOException("io exception");
         Exception exception = helper.createExceptionWithCause(cause, "test");
@@ -76,7 +77,7 @@ class MessagesHelperTest {
 
     @Test
     void testMessageFullConstructorExceptionFormatter() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
         Exception cause = new IOException("io exception");
         Exception exception = helper.createExceptionFullParameters(cause, true, true, "test");
         assertEquals("Example non-log/non-exception message test", exception.getMessage());
@@ -89,20 +90,20 @@ class MessagesHelperTest {
 
     @Test
     void testNotStringConstructor() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
         assertThrows(MessagesException.class, () -> helper.createExceptionWithMessage("test"));
     }
 
     @Test
     void testNotCauseConstructor() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
         Exception cause = new IOException("io exception");
         assertThrows(MessagesException.class, () -> helper.createExceptionWithCause(cause, "test"));
     }
 
     @Test
     void testNotFullConstructor() {
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
         Exception cause = new IOException("io exception");
         assertThrows(MessagesException.class, () -> helper.createExceptionFullParameters(cause, true, true, "test"));
     }
@@ -111,13 +112,13 @@ class MessagesHelperTest {
     void testAllConstructorsWithInvalidNumberOfReplacementVariables() {
         IOException exception = new IOException("io exception");
 
-        MessagesHelper helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
+        MessagesHelper<Logger,Level> helper = new MessagesHelperImpl(TEMPLATE, MessageOnlyException.class);
         assertThrows(MessagesException.class, helper::createExceptionWithMessage);
 
-        MessagesHelper helper2 = new MessagesHelperImpl(TEMPLATE, MessageForCauseException.class);
+        MessagesHelper<Logger,Level> helper2 = new MessagesHelperImpl(TEMPLATE, MessageForCauseException.class);
         assertThrows(MessagesException.class, () -> helper2.createExceptionWithCause(exception));
 
-        MessagesHelper helper3 = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
+        MessagesHelper<Logger,Level> helper3 = new MessagesHelperImpl(TEMPLATE, MessageFullConstructionException.class);
         assertThrows(MessagesException.class, () -> helper3.createExceptionFullParameters(exception, true, true));
     }
 }

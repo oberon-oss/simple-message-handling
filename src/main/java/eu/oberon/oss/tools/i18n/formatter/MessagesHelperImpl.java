@@ -16,28 +16,63 @@ import java.lang.reflect.Constructor;
  * @since 1.0.0
  */
 @Log4j2
-public class MessagesHelperImpl implements MessagesHelper {
+public class MessagesHelperImpl implements MessagesHelper<Logger, Level> {
     @Getter
     private final MessageDefinition messageDefinition;
-    @Getter
+
     private final @Nullable String exceptionClassName;
-    @Getter
     private final @Nullable Level logLevel;
 
     private @Nullable Constructor<? extends Exception> standardConstructor = null;
     private @Nullable Constructor<? extends Exception> throwableException = null;
     private @Nullable Constructor<? extends Exception> fullConstructor = null;
 
+    /**
+     * Creates a message formater for basic messages.
+     *
+     * @param formatString The formatting string to use.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString) {
-        this(formatString, null, null);
+        this(formatString, null, (Level) null);
     }
 
+    /**
+     * Creates a message formater for messages that are intended for logging.
+     *
+     * @param formatString The formatting string to use.
+     * @param logLevel     the default loglevel to use when logging the message.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString, Level logLevel) {
         this(formatString, null, logLevel);
     }
 
+    /**
+     * Creates a message formater intended for exception creation.
+     *
+     * @param formatString   The formatting string to use.
+     * @param exceptionClass the exception class to use when creating an actual exception instance.
+     *
+     * @since 1.0.0
+     */
     public MessagesHelperImpl(String formatString, Class<? extends Exception> exceptionClass) {
         this(formatString, exceptionClass, null);
+    }
+
+    /**
+     * Creates a message formatter that supports both logging messages AND exception creation.
+     *
+     * @param formatString   The formatting string to use.
+     * @param logLevel       the default loglevel to use when logging the message.
+     * @param exceptionClass The exception class to use when creating an actual exception instance.
+     *
+     * @since 1.0.0
+     */
+    public MessagesHelperImpl(String formatString, Level logLevel, Class<? extends Exception> exceptionClass) {
+        this(formatString, exceptionClass, logLevel);
     }
 
     private MessagesHelperImpl(String formatString, @Nullable Class<? extends Exception> exceptionClass, @Nullable Level logLevel) {
@@ -56,7 +91,8 @@ public class MessagesHelperImpl implements MessagesHelper {
         messageDefinition = new MessageDefinition(formatString);
     }
 
-    private static Constructor<? extends Exception> createConstructor(Class<? extends Exception> exceptionClass, Class<?>... parameterTypes) {
+    private static Constructor<? extends Exception> createConstructor(Class<? extends Exception> exceptionClass,
+                                                                      Class<?>... parameterTypes) {
         try {
             return exceptionClass.getConstructor(parameterTypes);
         } catch (NoSuchMethodException e) {
@@ -77,12 +113,17 @@ public class MessagesHelperImpl implements MessagesHelper {
     }
 
     @Override
-    @SuppressWarnings("java:S2629")
     public void logMessage(@NotNull Logger logger, @Nullable Object... params) {
+        logMessageWithLevelOverride(logger, logLevel, params);
+    }
+
+    @Override
+    @SuppressWarnings("java:S2629")
+    public void logMessageWithLevelOverride(Logger logger, Level overrideLevel, Object... params) {
         if (logLevel == null) {
             throw new MessagesException("Message is NOT a loggable message.");
         }
-        logger.log(logLevel, messageDefinition.createFormattedMessage(params));
+        logger.log(overrideLevel, messageDefinition.createFormattedMessage(params));
     }
 
     @Override
@@ -110,7 +151,8 @@ public class MessagesHelperImpl implements MessagesHelper {
     }
 
     @Override
-    public Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace, Object... params) {
+    public Exception createExceptionFullParameters(Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                                                   Object... params) {
         if (fullConstructor == null) {
             throw new MessagesException(exceptionClassName + ".getConstructor(String,Throwable,boolean,boolean) does not exist.");
         }
