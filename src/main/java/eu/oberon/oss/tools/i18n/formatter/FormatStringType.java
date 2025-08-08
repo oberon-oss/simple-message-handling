@@ -1,6 +1,7 @@
 package eu.oberon.oss.tools.i18n.formatter;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
  * @author TigerLilly64
  * @since 1.0.0
  */
+@Slf4j
 public enum FormatStringType {
 
     /**
@@ -30,7 +32,21 @@ public enum FormatStringType {
      *
      * @since 1.0.0
      */
-    STRING_FORMAT(Pattern.compile("%(?:[a-z]|%\\d+(?:\\.\\d+)?[a-z])")),
+    STRING_FORMAT(Pattern.compile
+            ("%(" +
+                    "(\\d+\\$|<)?" +                            // Argument
+                    "([#+ 0,(-])?" +                             // Flags
+                    "(\\d+)?" +                                 // Width
+                    "(\\.\\d+)?" +                              // Precision
+                    "(" +                                       // Conversions
+                    "[%n]" +                                    //      non-replacements
+                    "|[BbHhSsCcXxGgAa]" +                       //      Basic
+                    "|[dof]" +                                  //      Numbers
+                    "|[Tt][HIklMSLNPZzsQBbAaCYyjmdeRTrDFc]+" +  //      Date/time specifiers
+                    ")" +
+                    ")"
+            )
+    ),
 
     /**
      * Represents a message format type where the string contains placeholders
@@ -63,6 +79,7 @@ public enum FormatStringType {
         this.pattern = pattern;
     }
 
+    private static final Pattern x = Pattern.compile("%(\\d+)\\$.*");
     /**
      * Analyzes the given formatting string against the format pattern.
      *
@@ -70,16 +87,38 @@ public enum FormatStringType {
      *
      * @return The number of replacement/substitution elements where found in the format string.
      *
-     * @since 1.0.0 
+     * @since 1.0.0
      */
     public int analyze(String format) {
         Matcher logMatcher = pattern.matcher(format);
         int replacementCount = 0;
 
         while (logMatcher.find()) {
+            if (STRING_FORMAT == this) {
+                replacementCount = handleStringFormat(logMatcher, replacementCount);
+            } else {
+                replacementCount++;
+            }
+        }
+        return replacementCount;
+    }
+
+    private int handleStringFormat(Matcher logMatcher, int replacementCount) {
+        // Current group is '%%' or '%n' ? Then do not count, as these do not represent replacements
+        String current = logMatcher.group();
+
+        if (current.contentEquals("%%") || current.contentEquals("%n") || current.startsWith("%<")) {
+            return replacementCount;
+        }
+        Matcher matcher = x.matcher(current);
+        if (matcher.matches()) {
+            int replacementID = Integer.parseInt(matcher.group(1));
+            if (replacementID > replacementCount) {
+                replacementCount = replacementID;
+            }
+        } else {
             replacementCount++;
         }
-
         return replacementCount;
     }
 }
